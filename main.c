@@ -4,10 +4,24 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
 
-#define PASSWORD "[Hello World !894?]"
+#define PASSWORD_LENGTH 12
+char PASSWORD[PASSWORD_LENGTH + 1];
+
+//#define PASSWORD "[Hello World !894?]"
 
 char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
+
+void generate_random_password() {
+    size_t charset_length = strlen(charset);
+    srand(time(NULL));
+    for (size_t i = 0; i < PASSWORD_LENGTH; i++) {
+        PASSWORD[i] = charset[rand() % charset_length];
+    }
+    PASSWORD[PASSWORD_LENGTH] = '\0';
+}
 
 void brute_force() {
     size_t length = strlen(PASSWORD);
@@ -15,7 +29,7 @@ void brute_force() {
     memset(found, 0, sizeof(found));
     size_t i, j;
 
-    printf("Tentative de récupération du mot de passe...\n\n");
+    printf("Trying to get the password...\n\n");
 
     for (i = 0; i < length; i++) {
         for (j = 0; j < strlen(charset); j++) {
@@ -29,10 +43,12 @@ void brute_force() {
         }
     }
 
-    printf("Mot de passe trouvé : %s\n", found);
+    printf("Password : %s\n", found);
 }
 
 int main() {
+    generate_random_password();
+    printf("Generated password : %s\n", PASSWORD);
     brute_force();
     return 0;
 }
